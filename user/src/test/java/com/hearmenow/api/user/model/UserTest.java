@@ -1,6 +1,5 @@
 package com.hearmenow.api.user.model;
 
-import com.hearmenow.api.user.model.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
