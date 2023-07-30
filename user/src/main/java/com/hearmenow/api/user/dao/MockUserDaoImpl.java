@@ -18,7 +18,7 @@ public class MockUserDaoImpl implements UserDao {
         if (USERS.isEmpty()) {
             return List.of(
                     new User(UUID.randomUUID(), "Empty Users")
-            )
+            );
         }
         return USERS;
     }
