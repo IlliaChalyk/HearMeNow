@@ -1,6 +1,7 @@
 package com.hearmenow.api.user.dao;
 
 import com.hearmenow.api.user.dto.UserDto;
+import com.hearmenow.api.user.exception.ResourceNotFoundException;
 import com.hearmenow.api.user.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static java.lang.String.format;
 
 @Repository
 public class MockUserDaoImpl implements UserDao {
@@ -26,6 +29,12 @@ public class MockUserDaoImpl implements UserDao {
     }
 
     @Override
+    public Boolean isUserExist(UUID id) {
+        return USERS.stream()
+                .anyMatch(user -> user.getId() == id);
+    }
+
+    @Override
     public UUID createUser(UserDto userDto) {
         var user = new User(UUID.randomUUID(), userDto.name());
         USERS.add(user);
@@ -34,11 +43,15 @@ public class MockUserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(UUID id, UserDto userDto) {
-        throw new UnsupportedOperationException("Method is not implemented yet.");
+        USERS.stream()
+                .filter(user -> user.getId() == id)
+                .findAny()
+                .orElseThrow(() -> new ResourceNotFoundException(format("User with id %s not found", id.toString())))
+                .setFullName(userDto.name());
     }
 
     @Override
     public void deleteUser(UUID id) {
-        throw new UnsupportedOperationException("Method is not implemented yet.");
+        USERS.removeIf(user -> user.getId() == id);
     }
 }
