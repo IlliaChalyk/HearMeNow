@@ -5,10 +5,7 @@ import com.hearmenow.api.user.exception.ResourceNotFoundException;
 import com.hearmenow.api.user.model.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.String.format;
 
@@ -24,14 +21,14 @@ public class MockUserDaoImpl implements UserDao {
     @Override
     public Optional<User> getUser(UUID id) {
         return USERS.stream()
-                .filter(user -> user.getId().equals(id))
+                .filter(user -> Objects.equals(id, user.getId()))
                 .findAny();
     }
 
     @Override
     public Boolean isUserExist(UUID id) {
         return USERS.stream()
-                .anyMatch(user -> user.getId() == id);
+                .anyMatch(user -> Objects.equals(id, user.getId()));
     }
 
     @Override
@@ -44,7 +41,7 @@ public class MockUserDaoImpl implements UserDao {
     @Override
     public void updateUser(UUID id, UserDto userDto) {
         USERS.stream()
-                .filter(user -> user.getId() == id)
+                .filter(user -> Objects.equals(id, user.getId()))
                 .findAny()
                 .orElseThrow(() -> new ResourceNotFoundException(format("User with id %s not found", id.toString())))
                 .setFullName(userDto.name());
@@ -52,6 +49,6 @@ public class MockUserDaoImpl implements UserDao {
 
     @Override
     public void deleteUser(UUID id) {
-        USERS.removeIf(user -> user.getId() == id);
+        USERS.removeIf(user -> Objects.equals(id, user.getId()));
     }
 }
