@@ -18,7 +18,7 @@ public class MockUserDaoImpl implements UserDao {
         if (USERS.isEmpty()) {
             var userName = "Default User";
             return List.of(
-                    new User(UUID.fromString(userName), userName)
+                    new User(UUID.randomUUID(), userName)
             );
         }
         return USERS;
