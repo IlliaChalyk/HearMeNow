@@ -4,11 +4,9 @@ import com.hearmenow.api.user.dao.UserDao;
 import com.hearmenow.api.user.dto.UserDto;
 import com.hearmenow.api.user.exception.ResourceNotFoundException;
 import com.hearmenow.api.user.mapper.UserDtoMapper;
-import com.hearmenow.api.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -52,17 +50,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UUID id, UserDto userDto) {
-        if (!userDao.isUserExist(id)) {
-            throw new ResourceNotFoundException(format("User with id %s not found", id.toString()));
-        }
-
+        checkUserExists(id);
         userDao.updateUser(id, userDto);
     }
 
     @Override
     public void deleteUser(UUID id) {
-
-
+        checkUserExists(id);
         userDao.deleteUser(id);
+    }
+
+    private void checkUserExists(UUID id) {
+        if (!userDao.isUserExist(id)) {
+            throw new ResourceNotFoundException(format("User with id %s not found", id.toString()));
+        }
     }
 }
