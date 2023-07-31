@@ -1,7 +1,6 @@
 package com.hearmenow.api.user.controller;
 
 import com.hearmenow.api.user.dto.UserDto;
-import com.hearmenow.api.user.model.User;
 import com.hearmenow.api.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable UUID id) {
+    public UserDto getUserById(@PathVariable UUID id) {
         return userService.getUser(id);
     }
 

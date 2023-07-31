@@ -1,36 +1,48 @@
 package com.hearmenow.api.user.service;
 
-import com.hearmenow.api.user.dao.MockUserDaoImpl;
+import com.hearmenow.api.user.dao.UserDao;
 import com.hearmenow.api.user.dto.UserDto;
 import com.hearmenow.api.user.exception.ResourceNotFoundException;
+import com.hearmenow.api.user.mapper.UserDtoMapper;
 import com.hearmenow.api.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final MockUserDaoImpl userDao;
+    private final UserDao userDao;
+    private final UserDtoMapper userDtoMapper;
 
     @Autowired
-    public UserServiceImpl(MockUserDaoImpl userDao) {
+    public UserServiceImpl(UserDao userDao, UserDtoMapper userDtoMapper) {
         this.userDao = userDao;
+        this.userDtoMapper = userDtoMapper;
     }
 
     @Override
-    public User getUser(UUID id) {
+    public UserDto getUser(UUID id) {
         return userDao
                 .getUser(id)
-                .orElseThrow(() -> new ResourceNotFoundException(format("User with id %s not found", id.toString())));
+                .map(userDtoMapper)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(format("User with id %s not found", id.toString()))
+                );
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        return userDao
+                .getAllUsers()
+                .stream()
+                .map(userDtoMapper)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -40,11 +52,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UUID id, UserDto userDto) {
+        if (!userDao.isUserExist(id)) {
+            throw new ResourceNotFoundException(format("User with id %s not found", id.toString()));
+        }
+
         userDao.updateUser(id, userDto);
     }
 
     @Override
     public void deleteUser(UUID id) {
+
+
         userDao.deleteUser(id);
     }
 }

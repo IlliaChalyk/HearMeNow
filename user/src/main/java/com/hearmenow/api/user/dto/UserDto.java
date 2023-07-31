@@ -1,4 +1,6 @@
 package com.hearmenow.api.user.dto;
 
-public record UserDto(String name) {
+import java.util.UUID;
+
+public record UserDto(UUID id, String name) {
 }

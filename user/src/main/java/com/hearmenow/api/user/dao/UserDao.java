@@ -14,6 +14,8 @@ public interface UserDao {
 
     UUID createUser(UserDto userDto);
 
+    Boolean isUserExist(UUID id);
+
     void updateUser(UUID id, UserDto userDto);
 
     void deleteUser(UUID id);
