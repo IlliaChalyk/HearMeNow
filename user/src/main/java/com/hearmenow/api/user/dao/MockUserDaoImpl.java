@@ -20,7 +20,8 @@ public class MockUserDaoImpl implements UserDao {
                     new User(UUID.randomUUID(), "Empty User1"),
                     new User(UUID.randomUUID(), "Empty User2"),
                     new User(UUID.randomUUID(), "Empty User3"),
-                    new User(UUID.randomUUID(), "Latest User4")
+                    new User(UUID.randomUUID(), "Latest User4"),
+                    new User(UUID.randomUUID(), "Test Jenkins Job")
             );
         }
         return USERS;
