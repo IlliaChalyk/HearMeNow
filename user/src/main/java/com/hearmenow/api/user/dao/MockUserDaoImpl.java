@@ -15,12 +15,6 @@ public class MockUserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        if (USERS.isEmpty()) {
-            var userName = "Default User";
-            return List.of(
-                    new User(UUID.randomUUID(), userName)
-            );
-        }
         return USERS;
     }
 
